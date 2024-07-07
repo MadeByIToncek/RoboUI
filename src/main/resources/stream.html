@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="android-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes"> -->
+
+    <title>robosoutez</title>
+
+    <style>
+        body {
+            padding: 0;
+            border: 0;
+            margin: 0;
+            background-color: transparent;
+            font-size: 0.8rem;
+        }
+
+        h1,
+        h2 {
+            margin: 0;
+        }
+
+        #_1_team,
+        #_2_team {
+            width: 30vw;
+            position: absolute;
+            display: flex;
+            margin: 1vw;
+        }
+
+        #_1_team {
+            left: 0;
+            flex-direction: column;
+            align-items: start;
+        }
+
+        #_2_team {
+            right: 0;
+            flex-direction: column;
+            align-items: end;
+
+        }
+
+        .team-name {
+            padding: 2vw;
+            margin: 1vw;
+            border-radius: 2vw;
+            width: 15vw;
+        }
+
+        .team-player {
+            background-color: red;
+            padding: 1vw;
+            margin: 1vw;
+            border-radius: 2vw;
+            width: 10vw;
+        }
+
+        .team-box {
+            width: 20vw;
+            height: 14vh;
+            border: 6px solid black;
+            border-radius: 2vw;
+            margin: 1vw;
+        }
+
+        .team-box div {
+            width: 1vw;
+            height: 1vw;
+            background-color: green;
+            border-radius: 50%;
+            margin: 0.5vw;
+            display: inline-block;
+        }
+
+        #timer {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+        }
+
+        #timer-h1 {
+            background-color: yellow;
+            padding: 0.5vw;
+            margin: 2vw;
+            border-radius: 2vw;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .team-score {
+            padding: 2vw;
+            margin: 1vw;
+            border-radius: 2vw;
+            width: 15vw;
+            background-color: blue;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <section id="_1_team">
+        <h1 id="_1_team-name" class="team-name"></h1> <!--ingame counting results-->
+        <h2 id="_1_team-1_player" class="team-player"></h2> <!--ingame counting results-->
+        <h2 id="_1_team-2_player" class="team-player"></h2> <!--ingame counting results-->
+        <h2 id="_1_team-3_player" class="team-player"></h2> <!--ingame counting results-->
+        <div id="_1_team-1_box" class="team-box"></div> <!--ingame-->
+        <div id="_1_team-2_box" class="team-box"></div> <!--ingame-->
+
+        <h2 id="_1_team-score" class="team-score"></h2> <!--results-->
+    </section>
+
+    <section id="_2_team">
+        <h1 id="_2_team-name" class="team-name"></h1>
+        <h2 id="_2_team-1_player" class="team-player"></h2>
+        <h2 id="_2_team-2_player" class="team-player"></h2>
+        <h2 id="_2_team-3_player" class="team-player"></h2>
+        <div id="_2_team-1_box" class="team-box"></div>
+        <div id="_2_team-2_box" class="team-box"></div>
+
+        <h2 id="_2_team-score" class="team-score"></h2>
+    </section>
+
+    <section id="timer">
+        <h1 id="timer-h1">30:12</h1>
+    </section>
+
+
+</body>
+
+<script>let jsone = `{
+    "act": "reset",
+    "body": ""
+
+}`
+
+    let jsonee = `{
+        "act": "setTeams",
+        "body": {
+            "team1": {
+                "name": "Jméno týmu",
+                "members": {
+                    "name": "Pepa",
+                    "color": "#FF0000"
+                },
+                "teamColor": "#AAAA00"
+            }, 
+            "team2": {
+                "name": "Jméno týmu",
+                "members": {
+                    "name": "Peepa",
+                    "color": "#FF0000"
+                },
+                "teamColor": "#AFFA00"
+            }
+        }
+    
+}`
+
+    let jsoneee = `{
+    "act": "setTime",
+    "body": "100s"
+
+}`
+
+    let jsoneeee = `{
+    "act": "setPoints",
+    "body": {
+        "team1": 16,
+        "team2": 13
+}`
+
+    let jsoneeeee = `{
+    "act": "setMode",
+    "body": "results"
+}`
+
+    let json = `{
+    "act": "setBalls",
+    "body": {
+        "team1pool1": 4,
+        "team1pool2": 3,
+        "team2pool1": 1,
+        "team2pool2": 2
+    }
+}`
+
+    let json_message = JSON.parse(json)
+
+
+
+    var all_functions = {
+
+        reset: function () {
+            location.reload()
+        },
+
+        setTeams: function () {
+
+            document.getElementById("_1_team-name").innerText = json_message.body.team1.name
+            document.getElementById("_1_team-name").style.backgroundColor = json_message.body.team1.teamColor
+
+            document.getElementById("_1_team-1_player").innerText = json_message.body.team1.members.name
+            document.getElementById("_1_team-2_player").innerText = json_message.body.team1.members.name
+            document.getElementById("_1_team-3_player").innerText = json_message.body.team1.members.name
+
+            document.getElementById("_2_team-name").innerText = json_message.body.team2.name
+            document.getElementById("_2_team-name").style.backgroundColor = json_message.body.team2.teamColor
+
+            document.getElementById("_2_team-1_player").innerText = json_message.body.team2.members.name
+            document.getElementById("_2_team-2_player").innerText = json_message.body.team2.members.name
+            document.getElementById("_2_team-3_player").innerText = json_message.body.team2.members.name
+        },
+
+        setTime: function () {
+            document.getElementById("timer-h1").innerText = json_message.body
+        },
+
+        setPoints: function () {
+            document.getElementById("_1_team-score").innerText = json_message.body.team1
+            document.getElementById("_2_team-score").innerText = json_message.body.team2
+        },
+
+        setMode: function () {
+
+            document.getElementById("_1_team-1_box").style.display = "none"
+            document.getElementById("_1_team-2_box").style.display = "none"
+            document.getElementById("_1_team-score").style.display = "none"
+
+            document.getElementById("_2_team-1_box").style.display = "none"
+            document.getElementById("_2_team-2_box").style.display = "none"
+            document.getElementById("_2_team-score").style.display = "none"
+
+            if (json_message.body == "ingame") {
+                document.getElementById("_1_team-1_box").style.display = null
+                document.getElementById("_1_team-2_box").style.display = null
+
+                document.getElementById("_2_team-1_box").style.display = null
+                document.getElementById("_2_team-2_box").style.display = null
+            }
+
+            else if (json_message.body == "results") {
+                document.getElementById("_1_team-score").style.display = null
+                document.getElementById("_2_team-score").style.display = null
+            }
+        },
+
+        setBalls: function () {
+            document.getElementById("_1_team-1_box").innerHTML = ""
+            document.getElementById("_1_team-2_box").innerHTML = ""
+            document.getElementById("_2_team-1_box").innerHTML = ""
+            document.getElementById("_2_team-2_box").innerHTML = ""
+
+            for (let i = 0; i < json_message.body.team1pool1; i++) {
+                document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < json_message.body.team1pool2; i++) {
+                document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < json_message.body.team2pool1; i++) {
+                document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < json_message.body.team2pool2; i++) {
+                document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
+            }
+
+            /*document.getElementById("_1_team-1_box").innerHTML = json_message.body.team1pool1
+            document.getElementById("_1_team-2_box").innerText = json_message.body.team1pool2
+    
+            document.getElementById("_2_team-1_box").innerText = json_message.body.team2pool1
+            document.getElementById("_2_team-2_box").innerText = json_message.body.team2pool2
+        */
+        }
+    }
+
+    all_functions[json_message.act]()
+
+
+    /*
+    Příkazy:
+     - "reset" - provést komplet reset stránky (refresh?) done
+     - "setTeams" - má "body" ve formátu #1, nastaví parametry jednotlivých týmů done
+     - "setTime" - má "body" ve formátu "<text>", nastaví časovač na hodnotu v requestu
+     - "setPoints" - má "body" ve formátu #2, nastaví body obou týmů na dané hodnoty
+     - "setMode" - má body ve formátu "<text>", který nabývá hodnot "ingame", "counting", "results"
+     - "setBalls" - má "body" ve formátu #3, nastaví množství balónků v každém z cílů, možno nahradit za "addBalls" + "decBalls"
+    
+    ================  Formát #0  ================
+    {
+        "act": "<jméno příkazu>",
+        "body": "<optional, podle definice výše>"
+    }
+    
+    ================  Formát #1  ================
+    {
+        "team1": {
+            "name": "Jméno týmu",
+            "members": [{
+                "name": "Pepa",
+                "color": "#FF0000"
+            }],
+            "teamColor": "#AAAA00"
+        }, 
+        "team2": <to stejné co team1>
+    }
+    
+    ================  Formát #2  ================
+    {
+        "team1": 16,
+        "team2": 13
+    }
+    
+    ================  Formát #3  ================
+    {
+        "team1pool1": 4,
+        "team1pool2": 3,
+        "team2pool1": 1,
+        "team2pool2": 2
+    }
+    
+    
+    
+    
+    {
+        "act": "reset",
+        "body": ""
+    }
+    
+    {
+            "act": "setTeams",
+            "body": "{
+                "team1": {
+                    "name": "Jméno týmu",
+                    "members": {
+                        "name": "Pepa",
+                        "color": "#FF0000"
+                    },
+                    "teamColor": "#AAAA00"
+                }, 
+                "team2": {
+                    "name": "Jméno týmu",
+                    "members": {
+                        "name": "Pepa",
+                        "color": "#FF0000"
+                    },
+                    "teamColor": "#AAAA00"
+                }
+            }
+        }
+    }
+    
+    
+    
+    */</script>

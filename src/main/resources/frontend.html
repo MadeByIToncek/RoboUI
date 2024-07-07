@@ -1,0 +1,104 @@
+<!--
+hard reset - prevent omylem
+reset reload
+
+dalsi layna
+box: 5x text poli, tlacitko send
+
+box: 2 drodown, send
+
+box: play, start countdown, interupt, conut
+
+box: results 2 number inputs
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="android-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes"> -->
+
+    <title>robosoutez control panel</title>
+
+    <style>
+        section {
+            display: flex;
+            margin: 5vh;
+            border-bottom: solid 3px red;
+        }
+
+        button,
+        input,
+        select {
+            margin: 1vw;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <section id="reset">
+        <input type="checkbox">
+        <p>check this to hard reset</p>
+        <button>hard reset!</button>
+        <button>soft reset</button>
+    </section>
+
+    <section id="cc">
+        <input type="text">
+        <input type="text">
+        <input type="text">
+        <input type="text">
+        <input type="text">
+    </section>
+
+    <section id="teams">
+        <select>
+            <option value=""></option>
+            <option value=""></option>
+        </select>
+        <select>
+            <option value=""></option>
+            <option value=""></option>
+        </select>
+    </section>
+
+    <section id="main_panel">
+        <button id="play">play</button>
+        <button id="start">start</button>
+        <button id="countdown">countdown</button>
+        <button id="interupt">interupt</button>
+        <button id="conut">conut</button>
+    </section>
+
+    <section id="score"></section>
+
+
+</body>
+
+
+<script>
+
+    const xhttpr = new XMLHttpRequest();
+    xhttpr.open('GET', '/', true);
+
+
+    xhttpr.send("hardreset");
+
+    xhttpr.onload = () => {
+        if (xhttpr.status === 200) {
+            //const response = JSON.parse(xhttpr.response);
+            console.log(xhttpr.response)
+        } else {
+            // Handle error
+        }
+    };
+</script>
