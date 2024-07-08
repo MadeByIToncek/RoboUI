@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 public class Main {
@@ -25,17 +26,13 @@ public class Main {
 
         app.get("/", ctx -> ctx.result(":)"));
 
-        app.ws("/", conf -> {
-            conf.onConnect(wscc -> {
-                clientList.add(wscc);
-            });
-        });
+        app.ws("/", conf -> conf.onConnect(wscc -> clientList.add(wscc)));
 
         app.get("/ui/stream", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/stream.html")));
 
-        app.get("/ui/tv1", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/tv1.html")));
-
-        app.get("/frontend", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/frontend.html")));
+//        app.get("/ui/tv1", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/tv1.html")));
+//
+//        app.get("/frontend", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/frontend.html")));
 
         app.post("/api/setupCC", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
@@ -46,10 +43,12 @@ public class Main {
         });
 
         app.post("/api/hardreset", ctx -> {
+            Logger.getGlobal().info("Hard reset!");
             hardReset();
             ctx.result();
         });
         app.post("/api/reset", ctx -> {
+            Logger.getGlobal().info("Soft reset!");
             reset();
             ctx.result();
         });
@@ -57,11 +56,15 @@ public class Main {
         app.get("/api/mode", ctx -> ctx.result(mode));
         app.post("/api/changeMode", ctx -> {
             mode = ctx.body();
+            Logger.getGlobal().info("Changed mode to " + mode);
             ctx.result();
         });
 
         app.post("/api/preload", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
+            Logger.getGlobal().info("Preloading with following teams:\n" +
+                    " - " + body.getString("team1") + "\n" +
+                    " - " + body.getString("team2"));
             try {
                 preload(loadTeam(body.getString("team1")), loadTeam(body.getString("team2")));
             } catch (TeamNotFoundError e) {
@@ -70,19 +73,19 @@ public class Main {
             ctx.result();
         });
         app.post("/api/play", ctx -> {
+            Logger.getGlobal().info("Starting playout!");
             play();
-            ctx.result();
-        });
-        app.post("/api/start", ctx -> {
             startCountdown();
             ctx.result();
         });
         app.post("/api/interrupt", ctx -> {
+            Logger.getGlobal().info("Interrupting!");
             interrupt();
             ctx.result();
         });
         app.post("/api/results", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
+            Logger.getGlobal().info("Displaying results of " + body.getInt("team1") + " vs " + body.getInt("team2") + "!");
             setResults(body.getInt("team1"), body.getInt("team2"));
             ctx.result();
         });
