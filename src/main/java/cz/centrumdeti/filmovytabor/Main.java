@@ -1,11 +1,13 @@
 package cz.centrumdeti.filmovytabor;
 
-import cz.centrumdeti.filmovytabor.records.Team;
 import io.javalin.Javalin;
+import io.javalin.http.ContentType;
 import io.javalin.websocket.WsConnectContext;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ public class Main {
     static ArrayList<WsConnectContext> clientList = new ArrayList<>();
     static CasparController cc;
     static CountdownManager cdm;
+    static String mode = "preload";
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
             config.useVirtualThreads = true;
@@ -28,11 +31,11 @@ public class Main {
             });
         });
 
-        app.get("/ui/stream", ctx -> ctx.result(getResource("stream.html")));
+        app.get("/ui/stream", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/stream.html")));
 
-        app.get("/ui/tv1", ctx -> ctx.result(getResource("tv1.html")));
+        app.get("/ui/tv1", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/tv1.html")));
 
-        app.get("/frontend", ctx -> ctx.result(getResource("frontend.html")));
+        app.get("/frontend", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/frontend.html")));
 
         app.post("/api/setupCC", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
@@ -50,6 +53,13 @@ public class Main {
             reset();
             ctx.result();
         });
+
+        app.get("/api/mode", ctx -> ctx.result(mode));
+        app.post("/api/changeMode", ctx -> {
+            mode = ctx.body();
+            ctx.result();
+        });
+
         app.post("/api/preload", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
             try {
@@ -108,8 +118,10 @@ public class Main {
     }
 
     private static void reset() {
+        setMode("hidden");
         broadcast(new JSONObject()
                 .put("act", "reset"));
+        setMode("preload");
     }
 
     private static void preload(String team1, String team2) {
@@ -143,10 +155,7 @@ public class Main {
                 counting();
             }
         };
-
-        broadcast(new JSONObject()
-                .put("act", "setMode")
-                .put("body", "ingame"));
+        setMode("ingame");
     }
 
     private static void interrupt() {
@@ -155,9 +164,7 @@ public class Main {
     }
 
     private static void counting() {
-        broadcast(new JSONObject()
-                .put("act", "setMode")
-                .put("body", "counting"));
+        setMode("counting");
     }
 
     private static void setResults(int team1, int team2) {
@@ -166,12 +173,21 @@ public class Main {
                 .put("body", new JSONObject()
                         .put("team1", team1)
                         .put("team2", team2)));
+
+        setMode("results");
     }
 
     public static void broadcast(JSONObject text) {
         for (WsConnectContext wscc : clientList) {
             wscc.send(text.toString());
         }
+    }
+
+    private static void setMode(String targetMode) {
+        mode = targetMode;
+        broadcast(new JSONObject()
+                .put("act", "setMode")
+                .put("body", mode));
     }
 
     private static void sleep(int i) {
