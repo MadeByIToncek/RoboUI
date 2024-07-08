@@ -13,12 +13,24 @@
     <title>robosoutez</title>
 
     <style>
+        :root {
+            --corner_roundness: 0vw;
+            --border: 0px solid black;
+            --brightness: 70%;
+            --padding: 1vw;
+            --transision_speed: 1s;
+
+
+            --team1_color: #FF0000;
+            --team2_color: #0000FF;
+        }
+
         body {
             padding: 0;
             border: 0;
             margin: 0;
             background-color: transparent;
-            font-size: 0.8rem;
+            font-size: 1.1rem;
         }
 
         h1,
@@ -28,10 +40,9 @@
 
         #_1_team,
         #_2_team {
-            width: 30vw;
             position: absolute;
             display: flex;
-            margin: 1vw;
+            height: 100vh;
         }
 
         #_1_team {
@@ -44,63 +55,125 @@
             right: 0;
             flex-direction: column;
             align-items: end;
-
         }
 
         .team-name {
-            padding: 2vw;
+            padding: var(--padding);
             margin: 1vw;
-            border-radius: 2vw;
+            border-radius: var(--corner_roundness);
             width: 15vw;
+            border: var(--border);
+            background-color: var(--team1_color);
+            filter: brightness(var(--brightness));
+            transition: var(--transision_speed);
         }
 
-        .team-player {
-            background-color: red;
-            padding: 1vw;
-            margin: 1vw;
-            border-radius: 2vw;
-            width: 10vw;
+        #_2_team-name {
+            background-color: var(--team2_color);
         }
 
         .team-box {
-            width: 20vw;
-            height: 14vh;
-            border: 6px solid black;
-            border-radius: 2vw;
+            width: 15vw;
+            height: 15vh;
+            border: solid 3px black;
+            border-radius: var(--corner_roundness);
             margin: 1vw;
+            transition: var(--transision_speed);
         }
 
         .team-box div {
-            width: 1vw;
-            height: 1vw;
-            background-color: green;
+            width: 1.2vw;
+            height: 1.2vw;
+            background-color: #22b14c;
             border-radius: 50%;
             margin: 0.5vw;
             display: inline-block;
+        }
+
+        #_1_team-2_box,
+        #_2_team-2_box {
+            position: absolute;
+            bottom: 0;
+
+        }
+
+        #_1_team-2_box div,
+        #_2_team-2_box div {
+            background-color: #fff200;
         }
 
         #timer {
             width: 100vw;
             display: flex;
             justify-content: center;
+            transition: var(--transision_speed);
+        }
+
+        #timer-container {
+            margin: 1vw;
+            overflow: hidden;
+
         }
 
         #timer-h1 {
-            background-color: yellow;
-            padding: 0.5vw;
-            margin: 2vw;
-            border-radius: 2vw;
+
+            border-radius: var(--corner_roundness);
             display: flex;
             justify-content: center;
+            border: var(--border);
+            background-color: #3f48cc;
+            padding: var(--padding);
+            color: #3f48cc;
+            width: 15vw;
 
         }
 
-        .team-score {
-            padding: 2vw;
-            margin: 1vw;
-            border-radius: 2vw;
+        #timer-timer {
             width: 15vw;
+            padding: var(--padding);
+            transform: translateY(-100%);
+            position: absolute;
+            z-index: 3;
+            text-align: center;
+            border: var(--border);
+            color: white;
+        }
+
+        #timer-div {
+            position: relative;
+            background-color: #00a2e8;
+            border: var(--border);
+            transform: translate(-25%, -100%);
+            width: 15vw;
+            padding: var(--padding);
+            color: #00a2e8;
+        }
+
+        .team-score {
+            padding: var(--padding);
+            margin: 1vw;
+            border-radius: var(--corner_roundness);
+            width: 5vw;
             background-color: blue;
+            position: absolute;
+            border: var(--border);
+            text-align: center;
+            transition: var(--transision_speed);
+            z-index: -1;
+        }
+
+        #_1_team-score {
+            right: 0;
+            transform: translate(100%);
+            border-left: 0;
+            background-color: var(--team1_color);
+        }
+
+        #_2_team-score {
+            left: 0;
+            transform: translate(-100%);
+            border-right: 0;
+            background-color: var(--team2_color);
         }
     </style>
 </head>
@@ -109,21 +182,16 @@
 <body>
 
     <section id="_1_team">
-        <h1 id="_1_team-name" class="team-name"></h1> <!--ingame counting results-->
-        <h2 id="_1_team-1_player" class="team-player"></h2> <!--ingame counting results-->
-        <h2 id="_1_team-2_player" class="team-player"></h2> <!--ingame counting results-->
-        <h2 id="_1_team-3_player" class="team-player"></h2> <!--ingame counting results-->
-        <div id="_1_team-1_box" class="team-box"></div> <!--ingame-->
-        <div id="_1_team-2_box" class="team-box"></div> <!--ingame-->
 
-        <h2 id="_1_team-score" class="team-score"></h2> <!--results-->
+        <h1 id="_1_team-name" class="team-name"></h1>
+        <div id="_1_team-1_box" class="team-box"></div>
+        <div id="_1_team-2_box" class="team-box"></div>
+
+        <h2 id="_1_team-score" class="team-score"></h2>
     </section>
 
     <section id="_2_team">
         <h1 id="_2_team-name" class="team-name"></h1>
-        <h2 id="_2_team-1_player" class="team-player"></h2>
-        <h2 id="_2_team-2_player" class="team-player"></h2>
-        <h2 id="_2_team-3_player" class="team-player"></h2>
         <div id="_2_team-1_box" class="team-box"></div>
         <div id="_2_team-2_box" class="team-box"></div>
 
@@ -131,71 +199,74 @@
     </section>
 
     <section id="timer">
-        <h1 id="timer-h1">30:12</h1>
+        <div id="timer-container">
+            <h1 id="timer-h1">X</h1>
+            <h1 id="timer-timer">30:20</h1>
+            <h1 id="timer-div">X</h1>
+        </div>
     </section>
 
 
 </body>
 
-<script>let jsone = `{
-    "act": "reset",
-    "body": ""
-
-}`
-
-    let jsonee = `{
+<script>
+    /*
+    let jsone = `{
+        "act": "reset",
+        "body": ""
+    
+    }`
+*/
+    let json = `{
         "act": "setTeams",
         "body": {
             "team1": {
                 "name": "Jméno týmu",
-                "members": {
-                    "name": "Pepa",
-                    "color": "#FF0000"
-                },
                 "teamColor": "#AAAA00"
             }, 
             "team2": {
-                "name": "Jméno týmu",
-                "members": {
-                    "name": "Peepa",
-                    "color": "#FF0000"
-                },
-                "teamColor": "#AFFA00"
+                "name": "Jméno tým2",
+                "teamColor": "#00FF00"
             }
         }
     
 }`
+    /*
+        let jsoneee = `{
+        "act": "setTime",
+        "body": "100s"
+    
+    }`
+    */
 
-    let jsoneee = `{
-    "act": "setTime",
-    "body": "100s"
+    let jsone = `{
+        "act": "setPoints",
+        "body": {
+            "team1": 16,
+            "team2": 13
+}
+            }`
 
-}`
-
-    let jsoneeee = `{
-    "act": "setPoints",
-    "body": {
-        "team1": 16,
-        "team2": 13
-}`
-
-    let jsoneeeee = `{
-    "act": "setMode",
-    "body": "results"
-}`
-
-    let json = `{
-    "act": "setBalls",
-    "body": {
-        "team1pool1": 4,
-        "team1pool2": 3,
-        "team2pool1": 1,
-        "team2pool2": 2
-    }
-}`
+    /*
+    
+        let jsoneeeee = `{
+        "act": "setMode",
+        "body": "results"
+    }`
+    */
+    let jsonee = `{
+        "act": "setBalls",
+        "body": {
+            "team1pool1": 4,
+            "team1pool2": 3,
+            "team2pool1": 1,
+            "team2pool2": 2
+        }
+    }`
 
     let json_message = JSON.parse(json)
 
+    let json_messagee = JSON.parse(jsone) //delete
 
 
     var all_functions = {
@@ -204,72 +275,93 @@
             location.reload()
         },
 
-        setTeams: function () {
+        setTeams: function (body_fnc) {
 
-            document.getElementById("_1_team-name").innerText = json_message.body.team1.name
-            document.getElementById("_1_team-name").style.backgroundColor = json_message.body.team1.teamColor
+            document.getElementById("_1_team-name").innerText = body_fnc.team1.name
+            document.documentElement.style.cssText = "--team1_color: " + body_fnc.team1.teamColor;
 
-            document.getElementById("_1_team-1_player").innerText = json_message.body.team1.members.name
-            document.getElementById("_1_team-2_player").innerText = json_message.body.team1.members.name
-            document.getElementById("_1_team-3_player").innerText = json_message.body.team1.members.name
-
-            document.getElementById("_2_team-name").innerText = json_message.body.team2.name
-            document.getElementById("_2_team-name").style.backgroundColor = json_message.body.team2.teamColor
-
-            document.getElementById("_2_team-1_player").innerText = json_message.body.team2.members.name
-            document.getElementById("_2_team-2_player").innerText = json_message.body.team2.members.name
-            document.getElementById("_2_team-3_player").innerText = json_message.body.team2.members.name
+            document.getElementById("_2_team-name").innerText = body_fnc.team2.name
+            document.documentElement.style.cssText = "--team2_color: " + body_fnc.team2.teamColor;
         },
 
-        setTime: function () {
-            document.getElementById("timer-h1").innerText = json_message.body
+        setTime: function (body_fnc) {
+            document.getElementById("timer-h1").innerText = body_fnc
         },
 
-        setPoints: function () {
-            document.getElementById("_1_team-score").innerText = json_message.body.team1
-            document.getElementById("_2_team-score").innerText = json_message.body.team2
+        setPoints: function (body_fnc) {
+            document.getElementById("_1_team-score").innerText = body_fnc.team1
+            document.getElementById("_2_team-score").innerText = body_fnc.team2
         },
 
-        setMode: function () {
+        setMode: function (body_fnc) {
 
-            document.getElementById("_1_team-1_box").style.display = "none"
-            document.getElementById("_1_team-2_box").style.display = "none"
-            document.getElementById("_1_team-score").style.display = "none"
 
-            document.getElementById("_2_team-1_box").style.display = "none"
-            document.getElementById("_2_team-2_box").style.display = "none"
-            document.getElementById("_2_team-score").style.display = "none"
+            document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
-            if (json_message.body == "ingame") {
-                document.getElementById("_1_team-1_box").style.display = null
-                document.getElementById("_1_team-2_box").style.display = null
+            document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
-                document.getElementById("_2_team-1_box").style.display = null
-                document.getElementById("_2_team-2_box").style.display = null
+            document.getElementById("timer").style.transform = "translateY(-100vw)"
+
+
+
+            if (body_fnc == "preload") {
+                console.log("preload mode, nothing displays")
             }
 
-            else if (json_message.body == "results") {
-                document.getElementById("_1_team-score").style.display = null
-                document.getElementById("_2_team-score").style.display = null
+            else if (body_fnc == "ingame") {
+                document.getElementById("_1_team-name").style.transform = null
+                document.getElementById("_1_team-1_box").style.transform = null
+                document.getElementById("_1_team-2_box").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+                document.getElementById("_2_team-1_box").style.transform = null
+                document.getElementById("_2_team-2_box").style.transform = null
+
+                document.getElementById("timer").style.transform = null
+
+            }
+            else if (body_fnc == "counting") {
+                document.getElementById("_1_team-name").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+
+            }
+            else if (body_fnc == "results") {
+                document.getElementById("_1_team-name").style.transform = null
+                document.getElementById("_1_team-score").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+                document.getElementById("_2_team-score").style.transform = null
+
+            }
+            else if (body_fnc == "hidden") {
+                console.log("hidden mode, nothing displays")
+
             }
         },
 
-        setBalls: function () {
+        setBalls: function (body_fnc) {
             document.getElementById("_1_team-1_box").innerHTML = ""
             document.getElementById("_1_team-2_box").innerHTML = ""
             document.getElementById("_2_team-1_box").innerHTML = ""
             document.getElementById("_2_team-2_box").innerHTML = ""
 
-            for (let i = 0; i < json_message.body.team1pool1; i++) {
+            for (let i = 0; i < body_fnc.team1pool1; i++) {
                 document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
             }
-            for (let i = 0; i < json_message.body.team1pool2; i++) {
+            for (let i = 0; i < body_fnc.team1pool2; i++) {
                 document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
             }
-            for (let i = 0; i < json_message.body.team2pool1; i++) {
+            for (let i = 0; i < body_fnc.team2pool1; i++) {
                 document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
             }
-            for (let i = 0; i < json_message.body.team2pool2; i++) {
+            for (let i = 0; i < body_fnc.team2pool2; i++) {
                 document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
             }
 
@@ -282,8 +374,10 @@
         }
     }
 
-    all_functions[json_message.act]()
 
+    all_functions["setMode"]("ingame")
+    all_functions[json_messagee.act](json_messagee.body)
+    all_functions[json_message.act](json_message.body)
 
     /*
     Příkazy:
