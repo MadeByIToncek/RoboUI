@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.logging.Logger;
 
 
@@ -74,7 +77,6 @@ public class Main {
         });
         app.post("/api/play", ctx -> {
             Logger.getGlobal().info("Starting playout!");
-            play();
             startCountdown();
             ctx.result();
         });
@@ -90,6 +92,47 @@ public class Main {
             ctx.result();
         });
 
+        app.post("/api/balls", ctx -> {
+            String[] split = ctx.body().split("\\r?|");
+            ctx.result(new JSONObject()
+                    .put("team1pool1", split[0])
+                    .put("team1pool2", split[1])
+                    .put("team2pool1", split[2])
+                    .put("team2pool2", split[3])
+                    .toString());
+        });
+
+        app.post("/api/changeTeams", ctx -> {
+            System.out.println(ctx.body());
+            String[] split = ctx.body().split("\\r?;");
+            try {
+                preload(loadTeam(split[0]), loadTeam(split[1]));
+            } catch (TeamNotFoundError e) {
+                throw new RuntimeException(e);
+            }
+            ctx.result();
+        });
+
+        app.get("/api/listTeams", ctx -> {
+            if(!new File("./teams/").exists()) {
+                new File("./teams/").mkdirs();
+            }
+            StringJoiner sj = new StringJoiner("\n");
+            for (File file : Objects.requireNonNull(new File("./teams/").listFiles())) {
+                if(file.getName().endsWith(".robo")) {
+                    sj.add(file.getName().substring(0,file.getName().length()-5));
+                }
+            }
+            ctx.result(sj.toString());
+        });
+
+        app.post("/api/submitScore", ctx -> {
+            Integer[] points = Arrays.stream(ctx.body().split("\\r?:")).map(Integer::parseInt).toList().toArray(new Integer[0]);
+            Logger.getGlobal().info("Set score to " + points[0] + ":" +  points[1]);
+            setResults(points[0], points[1]);
+            ctx.result();
+        });
+
         app.start(7777);
     }
 
@@ -98,7 +141,7 @@ public class Main {
         if(!new File("./teams/").exists()) {
             new File("./teams/").mkdirs();
         }
-        File teamfile = new File("./teams/" + teamID);
+        File teamfile = new File("./teams/" + teamID + ".robo");
 
         if (!teamfile.exists()) {
             throw new TeamNotFoundError("Unable to find team " + teamID);
@@ -133,15 +176,14 @@ public class Main {
                 .put("body", new JSONObject()
                         .put("team1", new JSONObject(team1))
                         .put("team2", new JSONObject(team2))));
-    }
-
-    private static void play() {
-        if(cc != null) {
-            cc.play();
-        }
+        setMode("loaded");
     }
 
     private static void startCountdown() {
+        if(cc != null) {
+            cc.play();
+        }
+
         cdm = new CountdownManager() {
             @Override
             void updateSecond(int current) {
