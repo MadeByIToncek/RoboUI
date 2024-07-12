@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+
+    body {
+        overflow: hidden;
+        background-color: #0f0f0f;
+    }
+
+    #centered {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #odpocet {
+        font-family: "Kode Mono", monospace;
+        font-size: 3000%;
+        font-weight: 400;
+        font-style: normal;
+        color: #ffffff;
+        position: absolute;
+        transition: 1s;
+        opacity: 0%;
+    }
+
+    #img {
+        position: absolute;
+        transition: 1s;
+        opacity: 0%;
+    }
+</style>
+
+<body>
+    <div id="centered">
+        <p id="odpocet">00:00</p>
+        <img id="img" src="fel.svg">
+    </div>
+</body>
+
+<script>
+    var unlocked = false;
+    function delay(duration) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, duration);
+        });
+    }
+
+    async function hide() {
+        document.getElementById("odpocet").style.opacity = "0%";
+        await delay(500)
+        document.getElementById("img").style.opacity = "100%";
+    }
+    async function show() {
+        document.getElementById("img").style.opacity = "0%";
+        await delay(500)
+        document.getElementById("odpocet").style.opacity = "100%";
+    }
+
+    const socket = new WebSocket('ws://localhost:7777');
+
+    socket.addEventListener("message", (event) => {
+        let json_message = JSON.parse(event.data)
+        if (unlocked) {
+            switch (json_message.act) {
+                case "setMode":
+                    console.log("Message from server ", event.data);
+                    if (json_message.body == "ingame") show();
+                    else hide();
+                    break;
+                case "setTime":
+                    document.getElementById("odpocet").innerText = str_pad_left(Math.floor(json_message.body / 60), '0', 2) + ':' + str_pad_left(json_message.body - Math.floor(json_message.body / 60) * 60, '0', 2);
+            }
+        }
+    });
+
+    function str_pad_left(string, pad, length) {
+        return (new Array(length + 1).join(pad) + string).slice(-length);
+    }
+
+    function update(data) {
+
+    }
+
+    function play() {
+        unlocked = true;
+        socket.send("requestMode");
+        document.getElementById("odpocet").style.opacity = "0%";
+        document.getElementById("img").style.opacity = "100%";
+    }
+
+    function stop() {
+        document.getElementById("odpocet").style.opacity = "0%";
+        document.getElementById("img").style.opacity = "0%";
+    }
+    function next() { }
+
+</script>
+
+</html>

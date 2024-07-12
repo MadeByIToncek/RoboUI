@@ -30,13 +30,20 @@ public class Main {
 
         app.get("/", ctx -> ctx.result(":)"));
 
-        app.ws("/", conf -> conf.onConnect(wscc -> clientList.add(wscc)));
+        app.ws("/", conf -> {
+            conf.onConnect(wscc -> clientList.add(wscc));
+            conf.onMessage(msg -> {
+                switch (msg.message()) {
+                    case "requestMode" -> msg.send(new JSONObject()
+                            .put("act", "setMode")
+                            .put("body", mode).toString(4));
+                }
+            });
+        });
 
         app.get("/ui/stream", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/stream.html")));
-
-//        app.get("/ui/tv1", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/tv1.html")));
-//
-//        app.get("/frontend", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/frontend.html")));
+        app.get("/ui/tv", ctx -> ctx.contentType(ContentType.TEXT_HTML).result(getResource("/tv.html")));
+        app.get("/ui/fel.svg", ctx -> ctx.contentType(ContentType.IMAGE_SVG).result(getResource("/fel.svg")));
 
         app.post("/api/setupCC", ctx -> {
             JSONObject body = new JSONObject(ctx.body());
@@ -103,7 +110,7 @@ public class Main {
                             .put("team1pool2", split[1])
                             .put("team2pool1", split[2])
                             .put("team2pool2", split[3]));
-            Logger.getGlobal().info(jo.toString(4));
+            //Logger.getGlobal().info(jo.toString(4));
             broadcast(jo);
             ctx.result();
         });

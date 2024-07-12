@@ -228,120 +228,120 @@
 
     var all_functions = {
 
-    reset: function () {
-        location.reload()
-    },
+        reset: function () {
+            location.reload()
+        },
 
-    setTeams: function (body_fnc) {
-        max_time = body_fnc.maxtime
+        setTeams: function (body_fnc) {
+            max_time = body_fnc.maxtime
 
-        document.getElementById("_1_team-name").innerText = body_fnc.team1.name
-        document.documentElement.style.setProperty('--team1_color', body_fnc.team1.color);
+            document.getElementById("_1_team-name").innerText = body_fnc.team1.name
+            document.documentElement.style.setProperty('--team1_color', body_fnc.team1.color);
 
-        document.getElementById("_2_team-name").innerText = body_fnc.team2.name
-        document.documentElement.style.setProperty('--team2_color', body_fnc.team2.color);
+            document.getElementById("_2_team-name").innerText = body_fnc.team2.name
+            document.documentElement.style.setProperty('--team2_color', body_fnc.team2.color);
 
-        console.log(body_fnc.team1.color)
-        console.log(body_fnc.team2.color)
-    },
+            console.log(body_fnc.team1.color)
+            console.log(body_fnc.team2.color)
+        },
 
-    setTime: function (body_fnc) {
-        document.getElementById("timer-div").style.transform = "translate(-" + ((((100 * body_fnc) / max_time) * - 1) + 100) + "%, -100%)"
-        console.log("translate(-" + ((100 * body_fnc) / max_time) + "%, -100%);")
+        setTime: function (body_fnc) {
+            document.getElementById("timer-div").style.transform = "translate(-" + ((((100 * body_fnc) / max_time) * - 1) + 100) + "%, -100%)"
+            console.log("translate(-" + ((100 * body_fnc) / max_time) + "%, -100%);")
 
-        document.getElementById("timer-timer").innerText = body_fnc
-    },
+            document.getElementById("timer-timer").innerText = body_fnc
+        },
 
-    setPoints: function (body_fnc) {
-        document.getElementById("_1_team-score").innerText = body_fnc.team1
-        document.getElementById("_2_team-score").innerText = body_fnc.team2
-    },
+        setPoints: function (body_fnc) {
+            document.getElementById("_1_team-score").innerText = body_fnc.team1
+            document.getElementById("_2_team-score").innerText = body_fnc.team2
+        },
 
-    setMode: function (body_fnc) {
-        document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
-        document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
-        document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
-        document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
+        setMode: function (body_fnc) {
+            document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
-        document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
-        document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
-        document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
-        document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
-        document.getElementById("timer").style.transform = "translateY(-100vw)"
+            document.getElementById("timer").style.transform = "translateY(-100vw)"
 
-        if (body_fnc == "preload") {
-            console.log("preload mode, nothing displays")
+            if (body_fnc == "preload") {
+                console.log("preload mode, nothing displays")
+            }
+
+            else if (body_fnc == "ingame") {
+                document.getElementById("_1_team-name").style.transform = null
+                document.getElementById("_1_team-1_box").style.transform = null
+                document.getElementById("_1_team-2_box").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+                document.getElementById("_2_team-1_box").style.transform = null
+                document.getElementById("_2_team-2_box").style.transform = null
+
+                document.getElementById("timer").style.transform = null
+            }
+            else if (body_fnc == "counting") {
+                document.getElementById("_1_team-name").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+            }
+            else if (body_fnc == "results") {
+                document.getElementById("_1_team-name").style.transform = null
+                document.getElementById("_1_team-score").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+                document.getElementById("_2_team-score").style.transform = null
+            }
+            else if (body_fnc == "hidden") {
+                console.log("hidden mode, nothing displays")
+            }
+        },
+
+        setBalls: function (body_fnc) {
+            document.getElementById("_1_team-1_box").innerHTML = ""
+            document.getElementById("_1_team-2_box").innerHTML = ""
+            document.getElementById("_2_team-1_box").innerHTML = ""
+            document.getElementById("_2_team-2_box").innerHTML = ""
+
+            for (let i = 0; i < body_fnc.team1pool1; i++) {
+                document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < body_fnc.team1pool2; i++) {
+                document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < body_fnc.team2pool1; i++) {
+                document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
+            }
+            for (let i = 0; i < body_fnc.team2pool2; i++) {
+                document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
+            }
+
+            /*document.getElementById("_1_team-1_box").innerHTML = json_message.body.team1pool1
+            document.getElementById("_1_team-2_box").innerText = json_message.body.team1pool2
+        
+            document.getElementById("_2_team-1_box").innerText = json_message.body.team2pool1
+            document.getElementById("_2_team-2_box").innerText = json_message.body.team2pool2
+            */
         }
-
-        else if (body_fnc == "ingame") {
-            document.getElementById("_1_team-name").style.transform = null
-            document.getElementById("_1_team-1_box").style.transform = null
-            document.getElementById("_1_team-2_box").style.transform = null
-
-            document.getElementById("_2_team-name").style.transform = null
-            document.getElementById("_2_team-1_box").style.transform = null
-            document.getElementById("_2_team-2_box").style.transform = null
-
-            document.getElementById("timer").style.transform = null
-        }
-        else if (body_fnc == "counting") {
-            document.getElementById("_1_team-name").style.transform = null
-
-            document.getElementById("_2_team-name").style.transform = null
-        }
-        else if (body_fnc == "results") {
-            document.getElementById("_1_team-name").style.transform = null
-            document.getElementById("_1_team-score").style.transform = null
-
-            document.getElementById("_2_team-name").style.transform = null
-            document.getElementById("_2_team-score").style.transform = null
-        }
-        else if (body_fnc == "hidden") {
-            console.log("hidden mode, nothing displays")
-        }
-    },
-
-    setBalls: function (body_fnc) {
-    document.getElementById("_1_team-1_box").innerHTML = ""
-    document.getElementById("_1_team-2_box").innerHTML = ""
-    document.getElementById("_2_team-1_box").innerHTML = ""
-    document.getElementById("_2_team-2_box").innerHTML = ""
-
-    for (let i = 0; i < body_fnc.team1pool1; i++) {
-        document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
-    }
-    for (let i = 0; i < body_fnc.team1pool2; i++) {
-        document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
-    }
-    for (let i = 0; i < body_fnc.team2pool1; i++) {
-        document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
-    }
-    for (let i = 0; i < body_fnc.team2pool2; i++) {
-        document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
-    }
-
-    /*document.getElementById("_1_team-1_box").innerHTML = json_message.body.team1pool1
-    document.getElementById("_1_team-2_box").innerText = json_message.body.team1pool2
-
-    document.getElementById("_2_team-1_box").innerText = json_message.body.team2pool1
-    document.getElementById("_2_team-2_box").innerText = json_message.body.team2pool2
-    */
-    }
     }
 
 
-    const socket = new WebSocket('//localhost:7777');
+    const socket = new WebSocket('ws://localhost:7777');
 
     let json_message
 
     socket.addEventListener("message", (event) => {
 
-    console.log("Message from server ", event.data);
+        console.log("Message from server ", event.data);
 
-    json_message = JSON.parse(event.data)
+        json_message = JSON.parse(event.data)
 
-    all_functions[json_message.act](json_message.body)
+        all_functions[json_message.act](json_message.body)
     });
 
 

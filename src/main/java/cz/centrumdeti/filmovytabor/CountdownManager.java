@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public abstract class CountdownManager {
-    int remaining = 60;
+    int remaining = 120;
     Timer timer;
 
     abstract void updateSecond(int current);
