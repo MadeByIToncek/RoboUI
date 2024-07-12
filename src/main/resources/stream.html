@@ -18,7 +18,7 @@
             --border: 0px solid black;
             --brightness: 70%;
             --padding: 1vw;
-            --transision_speed: 1s;
+            --transision_speed: 0s;
 
 
             --team1_color: #FF0000;
@@ -150,7 +150,7 @@
         }
 
         .team-score {
-            padding: var(--padding);
+            padding: 1.01vw;
             margin: 1vw;
             border-radius: var(--corner_roundness);
             width: 5vw;
@@ -210,248 +210,212 @@
 </body>
 
 <script>
-    /*
-    let jsone = `{
-        "act": "reset",
-        "body": ""
-    
-    }`
-*/
-    let json = `{
-        "act": "setTeams",
-        "body": {
-            "team1": {
-                "name": "Jméno týmu",
-                "teamColor": "#AAAA00"
-            }, 
-            "team2": {
-                "name": "Jméno tým2",
-                "teamColor": "#00FF00"
-            }
-        }
-    
-}`
-    /*
-        let jsoneee = `{
-        "act": "setTime",
-        "body": "100s"
-    
-    }`
-    */
+    document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
+    document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
+    document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
+    document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
-    let jsone = `{
-        "act": "setPoints",
-        "body": {
-            "team1": 16,
-            "team2": 13
-}
-            }`
+    document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
-    /*
-    
-        let jsoneeeee = `{
-        "act": "setMode",
-        "body": "results"
-    }`
-    */
-    let jsonee = `{
-        "act": "setBalls",
-        "body": {
-            "team1pool1": 4,
-            "team1pool2": 3,
-            "team2pool1": 1,
-            "team2pool2": 2
-        }
-    }`
+    document.getElementById("timer").style.transform = "translateY(-100vw)"
 
-    let json_message = JSON.parse(json)
+    document.documentElement.style.setProperty('--transision_speed', '1s');
 
-    let json_messagee = JSON.parse(jsone) //delete
-
+    var max_time = ""
 
     var all_functions = {
 
-        reset: function () {
-            location.reload()
-        },
+    reset: function () {
+        location.reload()
+    },
 
-        setTeams: function (body_fnc) {
+    setTeams: function (body_fnc) {
+        max_time = body_fnc.maxtime
 
-            document.getElementById("_1_team-name").innerText = body_fnc.team1.name
-            document.documentElement.style.cssText = "--team1_color: " + body_fnc.team1.teamColor;
+        document.getElementById("_1_team-name").innerText = body_fnc.team1.name
+        document.documentElement.style.setProperty('--team1_color', body_fnc.team1.color);
 
-            document.getElementById("_2_team-name").innerText = body_fnc.team2.name
-            document.documentElement.style.cssText = "--team2_color: " + body_fnc.team2.teamColor;
-        },
+        document.getElementById("_2_team-name").innerText = body_fnc.team2.name
+        document.documentElement.style.setProperty('--team2_color', body_fnc.team2.color);
 
-        setTime: function (body_fnc) {
-            document.getElementById("timer-h1").innerText = body_fnc
-        },
+        console.log(body_fnc.team1.color)
+        console.log(body_fnc.team2.color)
+    },
 
-        setPoints: function (body_fnc) {
-            document.getElementById("_1_team-score").innerText = body_fnc.team1
-            document.getElementById("_2_team-score").innerText = body_fnc.team2
-        },
+    setTime: function (body_fnc) {
+        document.getElementById("timer-div").style.transform = "translate(-" + ((((100 * body_fnc) / max_time) * - 1) + 100) + "%, -100%)"
+        console.log("translate(-" + ((100 * body_fnc) / max_time) + "%, -100%);")
 
-        setMode: function (body_fnc) {
+        document.getElementById("timer-timer").innerText = body_fnc
+    },
 
+    setPoints: function (body_fnc) {
+        document.getElementById("_1_team-score").innerText = body_fnc.team1
+        document.getElementById("_2_team-score").innerText = body_fnc.team2
+    },
 
-            document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
-            document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
-            document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
-            document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
+    setMode: function (body_fnc) {
+        document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
+        document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
+        document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
+        document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
-            document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
-            document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
-            document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
-            document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
+        document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
+        document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
+        document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
+        document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
-            document.getElementById("timer").style.transform = "translateY(-100vw)"
+        document.getElementById("timer").style.transform = "translateY(-100vw)"
 
-
-
-            if (body_fnc == "preload") {
-                console.log("preload mode, nothing displays")
-            }
-
-            else if (body_fnc == "ingame") {
-                document.getElementById("_1_team-name").style.transform = null
-                document.getElementById("_1_team-1_box").style.transform = null
-                document.getElementById("_1_team-2_box").style.transform = null
-
-                document.getElementById("_2_team-name").style.transform = null
-                document.getElementById("_2_team-1_box").style.transform = null
-                document.getElementById("_2_team-2_box").style.transform = null
-
-                document.getElementById("timer").style.transform = null
-
-            }
-            else if (body_fnc == "counting") {
-                document.getElementById("_1_team-name").style.transform = null
-
-                document.getElementById("_2_team-name").style.transform = null
-
-            }
-            else if (body_fnc == "results") {
-                document.getElementById("_1_team-name").style.transform = null
-                document.getElementById("_1_team-score").style.transform = null
-
-                document.getElementById("_2_team-name").style.transform = null
-                document.getElementById("_2_team-score").style.transform = null
-
-            }
-            else if (body_fnc == "hidden") {
-                console.log("hidden mode, nothing displays")
-
-            }
-        },
-
-        setBalls: function (body_fnc) {
-            document.getElementById("_1_team-1_box").innerHTML = ""
-            document.getElementById("_1_team-2_box").innerHTML = ""
-            document.getElementById("_2_team-1_box").innerHTML = ""
-            document.getElementById("_2_team-2_box").innerHTML = ""
-
-            for (let i = 0; i < body_fnc.team1pool1; i++) {
-                document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
-            }
-            for (let i = 0; i < body_fnc.team1pool2; i++) {
-                document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
-            }
-            for (let i = 0; i < body_fnc.team2pool1; i++) {
-                document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
-            }
-            for (let i = 0; i < body_fnc.team2pool2; i++) {
-                document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
-            }
-
-            /*document.getElementById("_1_team-1_box").innerHTML = json_message.body.team1pool1
-            document.getElementById("_1_team-2_box").innerText = json_message.body.team1pool2
-    
-            document.getElementById("_2_team-1_box").innerText = json_message.body.team2pool1
-            document.getElementById("_2_team-2_box").innerText = json_message.body.team2pool2
-        */
+        if (body_fnc == "preload") {
+            console.log("preload mode, nothing displays")
         }
+
+        else if (body_fnc == "ingame") {
+            document.getElementById("_1_team-name").style.transform = null
+            document.getElementById("_1_team-1_box").style.transform = null
+            document.getElementById("_1_team-2_box").style.transform = null
+
+            document.getElementById("_2_team-name").style.transform = null
+            document.getElementById("_2_team-1_box").style.transform = null
+            document.getElementById("_2_team-2_box").style.transform = null
+
+            document.getElementById("timer").style.transform = null
+        }
+        else if (body_fnc == "counting") {
+            document.getElementById("_1_team-name").style.transform = null
+
+            document.getElementById("_2_team-name").style.transform = null
+        }
+        else if (body_fnc == "results") {
+            document.getElementById("_1_team-name").style.transform = null
+            document.getElementById("_1_team-score").style.transform = null
+
+            document.getElementById("_2_team-name").style.transform = null
+            document.getElementById("_2_team-score").style.transform = null
+        }
+        else if (body_fnc == "hidden") {
+            console.log("hidden mode, nothing displays")
+        }
+    },
+
+    setBalls: function (body_fnc) {
+    document.getElementById("_1_team-1_box").innerHTML = ""
+    document.getElementById("_1_team-2_box").innerHTML = ""
+    document.getElementById("_2_team-1_box").innerHTML = ""
+    document.getElementById("_2_team-2_box").innerHTML = ""
+
+    for (let i = 0; i < body_fnc.team1pool1; i++) {
+        document.getElementById("_1_team-1_box").innerHTML += "<div></div>"
+    }
+    for (let i = 0; i < body_fnc.team1pool2; i++) {
+        document.getElementById("_1_team-2_box").innerHTML += "<div></div>"
+    }
+    for (let i = 0; i < body_fnc.team2pool1; i++) {
+        document.getElementById("_2_team-1_box").innerHTML += "<div></div>"
+    }
+    for (let i = 0; i < body_fnc.team2pool2; i++) {
+        document.getElementById("_2_team-2_box").innerHTML += "<div></div>"
+    }
+
+    /*document.getElementById("_1_team-1_box").innerHTML = json_message.body.team1pool1
+    document.getElementById("_1_team-2_box").innerText = json_message.body.team1pool2
+
+    document.getElementById("_2_team-1_box").innerText = json_message.body.team2pool1
+    document.getElementById("_2_team-2_box").innerText = json_message.body.team2pool2
+    */
+    }
     }
 
 
-    all_functions["setMode"]("ingame")
-    all_functions[json_messagee.act](json_messagee.body)
+    const socket = new WebSocket('//localhost:7777');
+
+    let json_message
+
+    socket.addEventListener("message", (event) => {
+
+    console.log("Message from server ", event.data);
+
+    json_message = JSON.parse(event.data)
+
     all_functions[json_message.act](json_message.body)
+    });
+
+
 
     /*
     Příkazy:
-     - "reset" - provést komplet reset stránky (refresh?) done
-     - "setTeams" - má "body" ve formátu #1, nastaví parametry jednotlivých týmů done
-     - "setTime" - má "body" ve formátu "<text>", nastaví časovač na hodnotu v requestu
-     - "setPoints" - má "body" ve formátu #2, nastaví body obou týmů na dané hodnoty
-     - "setMode" - má body ve formátu "<text>", který nabývá hodnot "ingame", "counting", "results"
-     - "setBalls" - má "body" ve formátu #3, nastaví množství balónků v každém z cílů, možno nahradit za "addBalls" + "decBalls"
-    
+    - "reset" - provést komplet reset stránky (refresh?) done
+    - "setTeams" - má "body" ve formátu #1, nastaví parametry jednotlivých týmů done
+    - "setTime" - má "body" ve formátu "<text>", nastaví časovač na hodnotu v requestu
+    - "setPoints" - má "body" ve formátu #2, nastaví body obou týmů na dané hodnoty
+    - "setMode" - má body ve formátu "<text>", který nabývá hodnot "ingame", "counting", "results"
+    - "setBalls" - má "body" ve formátu #3, nastaví množství balónků v každém z cílů, možno nahradit za "addBalls" + "decBalls"
+
     ================  Formát #0  ================
     {
-        "act": "<jméno příkazu>",
-        "body": "<optional, podle definice výše>"
+    "act": "<jméno příkazu>",
+    "body": "<optional, podle definice výše>"
     }
-    
+
     ================  Formát #1  ================
     {
-        "team1": {
-            "name": "Jméno týmu",
-            "members": [{
-                "name": "Pepa",
-                "color": "#FF0000"
-            }],
-            "teamColor": "#AAAA00"
-        }, 
-        "team2": <to stejné co team1>
+    "team1": {
+    "name": "Jméno týmu",
+    "members": [{
+        "name": "Pepa",
+        "color": "#FF0000"
+    }],
+    "teamColor": "#AAAA00"
+    },
+    "team2": <to stejné co team1>
     }
-    
+
     ================  Formát #2  ================
     {
-        "team1": 16,
-        "team2": 13
+    "team1": 16,
+    "team2": 13
     }
-    
+
     ================  Formát #3  ================
     {
-        "team1pool1": 4,
-        "team1pool2": 3,
-        "team2pool1": 1,
-        "team2pool2": 2
+    "team1pool1": 4,
+    "team1pool2": 3,
+    "team2pool1": 1,
+    "team2pool2": 2
     }
-    
-    
-    
-    
+
+
+
+
     {
-        "act": "reset",
-        "body": ""
+    "act": "reset",
+    "body": ""
     }
-    
+
     {
-            "act": "setTeams",
-            "body": "{
-                "team1": {
-                    "name": "Jméno týmu",
-                    "members": {
-                        "name": "Pepa",
-                        "color": "#FF0000"
-                    },
-                    "teamColor": "#AAAA00"
-                }, 
-                "team2": {
-                    "name": "Jméno týmu",
-                    "members": {
-                        "name": "Pepa",
-                        "color": "#FF0000"
-                    },
-                    "teamColor": "#AAAA00"
-                }
-            }
+    "act": "setTeams",
+    "body": "{
+        "team1": {
+            "name": "Jméno týmu",
+            "members": {
+                "name": "Pepa",
+                "color": "#FF0000"
+            },
+            "teamColor": "#AAAA00"
+        },
+        "team2": {
+            "name": "Jméno týmu",
+            "members": {
+                "name": "Pepa",
+                "color": "#FF0000"
+            },
+            "teamColor": "#AAAA00"
         }
     }
-    
-    
-    
-    */</script>
+    }
+    }
+*/</script>

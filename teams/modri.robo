@@ -1,4 +1,10 @@
 {
     "name": "Modří",
-    "color": "#0000FF"
+    "color": "#0066FF"
+    "textColor": "#000000",
+    "members": [
+        "Pepa",
+        "Jirka",
+        "Šimůnek"
+    ]
 }

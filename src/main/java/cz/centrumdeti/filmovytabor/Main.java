@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.ClosedChannelException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +58,9 @@ public class Main {
         });
 
         app.get("/api/mode", ctx -> ctx.result(mode));
+
         app.post("/api/changeMode", ctx -> {
-            mode = ctx.body();
+            setMode(ctx.body());
             Logger.getGlobal().info("Changed mode to " + mode);
             ctx.result();
         });
@@ -93,13 +95,17 @@ public class Main {
         });
 
         app.post("/api/balls", ctx -> {
-            String[] split = ctx.body().split("\\r?|");
-            ctx.result(new JSONObject()
-                    .put("team1pool1", split[0])
-                    .put("team1pool2", split[1])
-                    .put("team2pool1", split[2])
-                    .put("team2pool2", split[3])
-                    .toString());
+            String[] split = ctx.body().split("\\r?;");
+            JSONObject jo = new JSONObject()
+                    .put("act", "setBalls")
+                    .put("body", new JSONObject()
+                            .put("team1pool1", split[0])
+                            .put("team1pool2", split[1])
+                            .put("team2pool1", split[2])
+                            .put("team2pool2", split[3]));
+            Logger.getGlobal().info(jo.toString(4));
+            broadcast(jo);
+            ctx.result();
         });
 
         app.post("/api/changeTeams", ctx -> {
@@ -158,6 +164,7 @@ public class Main {
         if(cc != null) {
             cc.resetAll();
             sleep(100);
+            reset();
             cc.loadbg();
             sleep(100);
         }
@@ -165,6 +172,7 @@ public class Main {
 
     private static void reset() {
         setMode("hidden");
+        if(cdm != null) cdm.cancel();
         broadcast(new JSONObject()
                 .put("act", "reset"));
         setMode("preload");
@@ -174,6 +182,7 @@ public class Main {
         broadcast(new JSONObject()
                 .put("act", "setTeams")
                 .put("body", new JSONObject()
+                        .put("maxtime",60)
                         .put("team1", new JSONObject(team1))
                         .put("team2", new JSONObject(team2))));
         setMode("loaded");
@@ -183,23 +192,25 @@ public class Main {
         if(cc != null) {
             cc.play();
         }
+        if (cdm == null) {
+            cdm = new CountdownManager() {
+                @Override
+                void updateSecond(int current) {
+                    broadcast(new JSONObject()
+                            .put("act", "setTime")
+                            .put("body", current));
+                }
 
-        cdm = new CountdownManager() {
-            @Override
-            void updateSecond(int current) {
-                broadcast(new JSONObject()
-                        .put("act", "setTime")
-                        .put("body", current + "s"));
-            }
-
-            @Override
-            void timeIsUp() {
-                broadcast(new JSONObject()
-                        .put("act", "setTime")
-                        .put("body", "Konec!"));
-                counting();
-            }
-        };
+                @Override
+                void timeIsUp() {
+                    broadcast(new JSONObject()
+                            .put("act", "setTime")
+                            .put("body", -1));
+                    counting();
+                    cdm = null;
+                }
+            };
+        }
         setMode("ingame");
     }
 
@@ -224,7 +235,11 @@ public class Main {
 
     public static void broadcast(JSONObject text) {
         for (WsConnectContext wscc : clientList) {
-            wscc.send(text.toString());
+            try {
+                wscc.send(text.toString(4));
+            } catch (Exception e) {
+                //ignore
+            }
         }
     }
 
