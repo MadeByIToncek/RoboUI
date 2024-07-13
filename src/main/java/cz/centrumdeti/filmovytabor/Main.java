@@ -21,6 +21,7 @@ public class Main {
     static ArrayList<WsConnectContext> clientList = new ArrayList<>();
     static CasparController cc;
     static CountdownManager cdm;
+    static final int total_time = 120;
     static String mode = "preload";
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
@@ -189,7 +190,7 @@ public class Main {
         broadcast(new JSONObject()
                 .put("act", "setTeams")
                 .put("body", new JSONObject()
-                        .put("maxtime",60)
+                        .put("maxtime", total_time)
                         .put("team1", new JSONObject(team1))
                         .put("team2", new JSONObject(team2))));
         setMode("loaded");
@@ -200,7 +201,7 @@ public class Main {
             cc.play();
         }
         if (cdm == null) {
-            cdm = new CountdownManager() {
+            cdm = new CountdownManager(total_time) {
                 @Override
                 void updateSecond(int current) {
                     broadcast(new JSONObject()
@@ -210,9 +211,6 @@ public class Main {
 
                 @Override
                 void timeIsUp() {
-                    broadcast(new JSONObject()
-                            .put("act", "setTime")
-                            .put("body", -1));
                     counting();
                     cdm = null;
                 }

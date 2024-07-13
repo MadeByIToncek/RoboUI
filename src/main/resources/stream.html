@@ -13,6 +13,8 @@
     <title>robosoutez</title>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+
         :root {
             --corner_roundness: 0vw;
             --border: 0px solid black;
@@ -29,6 +31,9 @@
         }
 
         body {
+            font-family: "Kode Mono", monospace;
+            font-weight: 400;
+            font-style: normal;
             padding: 0;
             border: 0;
             margin: 0;
@@ -66,12 +71,13 @@
             padding: var(--padding);
             margin: 1vw;
             border-radius: var(--corner_roundness);
-            width: 28vw;
+            width: 30vw;
             border: var(--border);
             background-color: color-mix(in srgb, var(--team1_color) 70%, black);
             transition: var(--transision_speed);
             text-align: left;
             color: var(--team1_color_wb);
+            font-size: 2.2rem;
         }
 
         #_2_team-name {
@@ -102,6 +108,7 @@
         #_2_team-pl h2 {
             background-color: color-mix(in srgb, var(--team2_color) 70%, black);
             color: var(--team2_color_wb);
+            text-align: right;
         }
 
         #_1_team-pl h2:empty,
@@ -110,7 +117,7 @@
         }
 
         .team-box {
-            width: 15vw;
+            width: 16vw;
             height: 15vh;
             border: solid 3px black;
             border-radius: var(--corner_roundness);
@@ -153,7 +160,7 @@
         #timer-container {
             margin: 1vw;
             overflow: hidden;
-
+            font-size: 2.5rem;
         }
 
         #timer-h1 {
@@ -225,49 +232,41 @@
 
     <section id="_1_team">
 
-        <h1 id="_1_team-name" class="team-name">Intergalaktická 112</h1>
+        <h1 id="_1_team-name" class="team-name"></h1>
         <div id="_1_team-pl">
-            <h2 id="_1_team-pl_1">dominik</h2>
-            <h2 id="_1_team-pl_2">Jan R.</h2>
-            <h2 id="_1_team-pl_3">Martin</h2>
-            <h2 id="_1_team-pl_4">Vojta</h2>
+            <h2 id="_1_team-pl_1"></h2>
+            <h2 id="_1_team-pl_2"></h2>
+            <h2 id="_1_team-pl_3"></h2>
+            <h2 id="_1_team-pl_4"></h2>
         </div>
         <div id="_1_team-1_box" class="team-box">
-            <div></div>
-            <div></div>
         </div>
         <div id="_1_team-2_box" class="team-box">
-            <div></div>
-            <div></div>
         </div>
 
-        <h2 id="_1_team-score" class="team-score">12</h2>
+        <h2 id="_1_team-score" class="team-score"></h2>
     </section>
 
     <section id="_2_team">
-        <h1 id="_2_team-name" class="team-name">Aspoň 3. místo</h1>
+        <h1 id="_2_team-name" class="team-name"></h1>
         <div id="_2_team-pl">
-            <h2 id="_2_team-pl_1">Filip</h2>
-            <h2 id="_2_team-pl_2">Dan</h2>
-            <h2 id="_2_team-pl_3">Erik</h2>
+            <h2 id="_2_team-pl_1"></h2>
+            <h2 id="_2_team-pl_2"></h2>
+            <h2 id="_2_team-pl_3"></h2>
             <h2 id="_2_team-pl_4"></h2>
         </div>
         <div id="_2_team-1_box" class="team-box">
-            <div></div>
-            <div></div>
         </div>
         <div id="_2_team-2_box" class="team-box">
-            <div></div>
-            <div></div>
         </div>
 
-        <h2 id="_2_team-score" class="team-score">200</h2>
+        <h2 id="_2_team-score" class="team-score"></h2>
     </section>
 
     <section id="timer">
         <div id="timer-container">
             <h1 id="timer-h1">X</h1>
-            <h1 id="timer-timer">30:20</h1>
+            <h1 id="timer-timer">02:00</h1>
             <h1 id="timer-div">X</h1>
         </div>
     </section>
@@ -280,7 +279,7 @@
     document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
     document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
     document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
-    document.getElementById("_1_team-pl").style.transform = "translateX(100vw)"
+    document.getElementById("_1_team-pl").style.transform = "translateX(-100vw)"
     document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
     document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
@@ -321,17 +320,17 @@
             document.documentElement.style.setProperty('--team2_color', body_fnc.team2.color);
             document.documentElement.style.setProperty('--team1_color_wb', body_fnc.team2.textColor);
 
-            document.getElementById("_2_team-pl_1").innerText = body_fnc.team1.members[0]
-            document.getElementById("_2_team-pl_2").innerText = body_fnc.team1.members[1]
-            document.getElementById("_2_team-pl_3").innerText = body_fnc.team1.members[2]
-            document.getElementById("_2_team-pl_4").innerText = body_fnc.team1.members[3]
+            document.getElementById("_2_team-pl_1").innerText = body_fnc.team2.members[0]
+            document.getElementById("_2_team-pl_2").innerText = body_fnc.team2.members[1]
+            document.getElementById("_2_team-pl_3").innerText = body_fnc.team2.members[2]
+            document.getElementById("_2_team-pl_4").innerText = body_fnc.team2.members[3]
         },
 
         setTime: function (body_fnc) {
             document.getElementById("timer-div").style.transform = "translate(-" + ((((100 * body_fnc) / max_time) * - 1) + 100) + "%, -100%)"
             console.log("translate(-" + ((100 * body_fnc) / max_time) + "%, -100%);")
 
-            document.getElementById("timer-timer").innerText = document.getElementById("odpocet").innerText = str_pad_left(Math.floor(json_message.body / 60), '0', 2) + ':' + str_pad_left(json_message.body - Math.floor(json_message.body / 60) * 60, '0', 2);
+            document.getElementById("timer-timer").innerText = str_pad_left(Math.floor(json_message.body / 60), '0', 2) + ':' + str_pad_left(json_message.body - Math.floor(json_message.body / 60) * 60, '0', 2);
         },
 
 
@@ -347,7 +346,7 @@
             document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
             document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
             document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
-            document.getElementById("_1_team-pl").style.transform = "translateX(100vw)"
+            document.getElementById("_1_team-pl").style.transform = "translateX(-100vw)"
             document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
             document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
@@ -360,6 +359,14 @@
 
             if (body_fnc == "preload") {
                 console.log("preload mode, nothing displays")
+            }
+
+            else if (body_fnc == "loaded") {
+                document.getElementById("_1_team-name").style.transform = null
+                document.getElementById("_1_team-pl").style.transform = null
+
+                document.getElementById("_2_team-name").style.transform = null
+                document.getElementById("_2_team-pl").style.transform = null
             }
 
             else if (body_fnc == "ingame") {

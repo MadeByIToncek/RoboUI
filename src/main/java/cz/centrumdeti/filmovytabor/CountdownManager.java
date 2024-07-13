@@ -10,7 +10,8 @@ public abstract class CountdownManager {
     abstract void updateSecond(int current);
     abstract void timeIsUp();
 
-    public CountdownManager() {
+    public CountdownManager(int max) {
+        remaining = max;
         timer = new Timer(true);
         timer.schedule(new CountdownTask(),1000,1000);
     }
