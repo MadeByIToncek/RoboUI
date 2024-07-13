@@ -87,6 +87,8 @@
             border: var(--border);
             transition: var(--transision_speed);
             text-align: left;
+            position: absolute;
+            margin-top: 10vh;
         }
 
         #_1_team-pl h2,
@@ -119,7 +121,6 @@
         .team-box div {
             width: 1.2vw;
             height: 1.2vw;
-            background-color: #22b14c;
             border-radius: 50%;
             margin: 0.5vw;
             display: inline-block;
@@ -132,9 +133,14 @@
 
         }
 
-        #_1_team-2_box div,
+        #_1_team-1_box div,
         #_2_team-2_box div {
             background-color: #fff200;
+        }
+
+        #_1_team-2_box div,
+        #_2_team-1_box div {
+            background-color: #00a9e0
         }
 
         #timer {
@@ -226,8 +232,14 @@
             <h2 id="_1_team-pl_3">Martin</h2>
             <h2 id="_1_team-pl_4">Vojta</h2>
         </div>
-        <div id="_1_team-1_box" class="team-box"></div>
-        <div id="_1_team-2_box" class="team-box"></div>
+        <div id="_1_team-1_box" class="team-box">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="_1_team-2_box" class="team-box">
+            <div></div>
+            <div></div>
+        </div>
 
         <h2 id="_1_team-score" class="team-score">12</h2>
     </section>
@@ -240,8 +252,14 @@
             <h2 id="_2_team-pl_3">Erik</h2>
             <h2 id="_2_team-pl_4"></h2>
         </div>
-        <div id="_2_team-1_box" class="team-box"></div>
-        <div id="_2_team-2_box" class="team-box"></div>
+        <div id="_2_team-1_box" class="team-box">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="_2_team-2_box" class="team-box">
+            <div></div>
+            <div></div>
+        </div>
 
         <h2 id="_2_team-score" class="team-score">200</h2>
     </section>
@@ -259,17 +277,19 @@
 
 <script>
 
-    //document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
+    document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
     document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
     document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
-    //document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
+    document.getElementById("_1_team-pl").style.transform = "translateX(100vw)"
+    document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
-    //document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
     document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
     document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
-    //document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-pl").style.transform = "translateX(100vw)"
+    document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
-    //document.getElementById("timer").style.transform = "translateY(-100vw)"
+    document.getElementById("timer").style.transform = "translateY(-100vw)"
 
     document.documentElement.style.setProperty('--transision_speed', '1s');
 
@@ -327,11 +347,13 @@
             document.getElementById("_1_team-name").style.transform = "translateX(-100vw)"
             document.getElementById("_1_team-1_box").style.transform = "translateX(-100vw)"
             document.getElementById("_1_team-2_box").style.transform = "translateX(-100vw)"
+            document.getElementById("_1_team-pl").style.transform = "translateX(100vw)"
             document.getElementById("_1_team-score").style.transform = "translateX(-100vw)"
 
             document.getElementById("_2_team-name").style.transform = "translateX(100vw)"
             document.getElementById("_2_team-1_box").style.transform = "translateX(100vw)"
             document.getElementById("_2_team-2_box").style.transform = "translateX(100vw)"
+            document.getElementById("_2_team-pl").style.transform = "translateX(100vw)"
             document.getElementById("_2_team-score").style.transform = "translateX(100vw)"
 
             document.getElementById("timer").style.transform = "translateY(-100vw)"
