@@ -73,7 +73,7 @@
             border-radius: var(--corner_roundness);
             width: 30vw;
             border: var(--border);
-            background-color: color-mix(in srgb, var(--team1_color) 70%, black);
+            background-color: var(--team1_color);
             transition: var(--transision_speed);
             text-align: left;
             color: var(--team1_color_wb);
@@ -81,7 +81,7 @@
         }
 
         #_2_team-name {
-            background-color: color-mix(in srgb, var(--team2_color) 70%, black);
+            background-color: var(--team2_color);
             color: var(--team2_color_wb);
             text-align: right;
         }
@@ -101,12 +101,12 @@
         #_2_team-pl h2 {
             margin: 1vw;
             padding: 0.5vw;
-            background-color: color-mix(in srgb, var(--team1_color) 70%, black);
+            background-color: var(--team1_color);
             color: var(--team1_color_wb);
         }
 
         #_2_team-pl h2 {
-            background-color: color-mix(in srgb, var(--team2_color) 70%, black);
+            background-color: var(--team2_color);
             color: var(--team2_color_wb);
             text-align: right;
         }
@@ -119,15 +119,15 @@
         .team-box {
             width: 16vw;
             height: 15vh;
-            border: solid 3px black;
+            border: solid 5px #ffffffff;
             border-radius: var(--corner_roundness);
             margin: 1vw;
             transition: var(--transision_speed);
         }
 
         .team-box div {
-            width: 1.2vw;
-            height: 1.2vw;
+            width: 3vw;
+            height: 3vw;
             border-radius: 50%;
             margin: 0.5vw;
             display: inline-block;
@@ -142,7 +142,7 @@
 
         #_1_team-1_box div,
         #_2_team-2_box div {
-            background-color: #fff200;
+            background-color: #ffd900;
         }
 
         #_1_team-2_box div,
@@ -191,7 +191,7 @@
             position: relative;
             background-color: #00a2e8;
             border: var(--border);
-            transform: translate(-25%, -100%);
+            transform: translate(0%, -100%);
             width: 15vw;
             padding: var(--padding);
             color: #00a2e8;
@@ -207,13 +207,15 @@
             text-align: center;
             transition: var(--transision_speed);
             z-index: -1;
+            font-size: 2.2rem;
         }
+
 
         #_1_team-score {
             right: 0;
             transform: translate(100%);
             border-left: 0;
-            background-color: var(--team1_color);
+            background-color: color-mix(in srgb, var(--team1_color) 70%, black);
             color: var(--team1_color_wb);
         }
 
@@ -221,7 +223,7 @@
             left: 0;
             transform: translate(-100%);
             border-right: 0;
-            background-color: var(--team2_color);
+            background-color: color-mix(in srgb, var(--team2_color) 70%, black);
             color: var(--team2_color_wb);
         }
     </style>
@@ -318,7 +320,7 @@
 
             document.getElementById("_2_team-name").innerText = body_fnc.team2.name
             document.documentElement.style.setProperty('--team2_color', body_fnc.team2.color);
-            document.documentElement.style.setProperty('--team1_color_wb', body_fnc.team2.textColor);
+            document.documentElement.style.setProperty('--team2_color_wb', body_fnc.team2.textColor);
 
             document.getElementById("_2_team-pl_1").innerText = body_fnc.team2.members[0]
             document.getElementById("_2_team-pl_2").innerText = body_fnc.team2.members[1]

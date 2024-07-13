@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.ClosedChannelException;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,7 +33,10 @@ public class Main {
         app.get("/", ctx -> ctx.result(":)"));
 
         app.ws("/", conf -> {
-            conf.onConnect(wscc -> clientList.add(wscc));
+            conf.onConnect(wscc -> {
+                wscc.session.setIdleTimeout(Duration.ofDays(365));
+                clientList.add(wscc);
+            });
             conf.onMessage(msg -> {
                 switch (msg.message()) {
                     case "requestMode" -> msg.send(new JSONObject()
@@ -147,6 +151,11 @@ public class Main {
             ctx.result();
         });
 
+        Runtime.getRuntime().addShutdownHook(new Thread(()-> {
+            reset();
+            app.stop();
+        }));
+
         app.start(7777);
     }
 
@@ -221,6 +230,7 @@ public class Main {
 
     private static void interrupt() {
         cdm.cancel();
+        cdm = null;
         counting();
     }
 

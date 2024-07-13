@@ -1,11 +1,11 @@
 {
-    "name": "Červení",
-    "color": "#FF0000",
-    "textColor": "#FFFFFF",
+    "name": "Aspoň 3. místo",
+    "color": "#00f7ff",
+    "textColor": "#000000",
     "members": [
         "Filip K.",
         "Erik",
         "Dan",
-                     ""
+        ""
     ]
 }
