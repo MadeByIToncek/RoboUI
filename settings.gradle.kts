@@ -21,11 +21,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
     }
 }
 
 rootProject.name = "Robosoutež"
 include(":android")
-include(":desktop")
 include(":commons")
 include(":server")

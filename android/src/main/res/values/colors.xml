@@ -7,4 +7,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="default_bg">#010415</color>
+    <color name="default_bg_highlighted">#0E1F34</color>
+    <color name="default_fg">#0079FF</color>
+    <color name="default_text">#FFFFFF</color>
+    <color name="teamload_empty">#F00</color>
+    <color name="teamload_selected">#F60</color>
+    <color name="teamload_loaded">#0f0</color>
 </resources>

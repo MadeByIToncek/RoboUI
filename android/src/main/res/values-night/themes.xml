@@ -8,5 +8,9 @@
     <style name="Base.Theme.Robosoutež" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/default_fg</item>
+        <item name="colorPrimaryDark">@color/default_bg_highlighted</item>
+        <item name="colorAccent">@color/default_bg_highlighted</item>
+        <item name="android:statusBarColor">@color/default_bg</item>
     </style>
 </resources>

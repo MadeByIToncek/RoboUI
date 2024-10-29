@@ -5,7 +5,9 @@
 
 package cz.centrumdeti.filmovytabor.robosoutez.commons.comms.responses;
 
+import java.io.Serializable;
+
 import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Match;
 
-public record RequestNewMatchResponse(Match m) {
+public record RequestNewMatchResponse(Match m) implements Serializable {
 }

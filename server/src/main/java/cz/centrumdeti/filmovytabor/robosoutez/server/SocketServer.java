@@ -53,7 +53,7 @@ public class SocketServer {
 		public void run() {
 			try(ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 				ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
-                Object output = parent.rs.handler.executeRequest(in.readObject());
+				Object output = parent.rs.socketExecutor.executeRequest(in.readObject());
 				out.writeObject(output);
 			} catch(IOException | ClassNotFoundException e) {
 				log.error("SocketHandler process", e);

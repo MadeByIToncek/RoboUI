@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.centrumdeti.filmovytabor.robosoutez.commons.types.KeyStore;
+import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Match;
 import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Member;
 import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Team;
 
@@ -36,42 +37,34 @@ public class DatabaseHandler implements Closeable {
 //keep
 	}
 
-    public @Nullable String getValueFromKeystore(@NotNull KeyStore key) {
+	public @NotNull String getValueFromKeystore(@NotNull KeyStore key) {
 		try(Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM keystore WHERE 'key' = %s;".formatted(key))) {
 			if(rs.next()) {
 				return rs.getString("value");
 			} else {
-				return null;
+				String defval = key.def;
+				saveValueToKeystore(key, defval);
+				return defval;
 			}
-		} catch(SQLException e) {
-			log.error("getTeams() exception", e);
-			return null;
-		}
-	}
-
-    public @NotNull String keystoreGetOrDefault(@NotNull KeyStore key, @NotNull String defval) {
-		String val = getValueFromKeystore(key);
-		if(val == null) {
-			saveValueToKeystore(key, defval);
-			return defval;
-		} else {
-			return val;
+		} catch (SQLException e) {
+			log.error("getValueFromKeystore() exception", e);
+			return key.def;
 		}
 	}
 
     public void saveValueToKeystore(@NotNull KeyStore key, @NotNull String value) {
 		try(Statement stmt = conn.createStatement()) {
-			ResultSet rs = stmt.executeQuery("SELECT * FROM keystore WHERE 'key' = %s;".formatted(key));
+			ResultSet rs = stmt.executeQuery("SELECT * FROM keystore WHERE 'key' = %s;".formatted(key.name()));
 			if(rs.next()) {
 				rs.close();
-				stmt.executeUpdate("UPDATE keystore SET value='%s' WHERE `key`='%s';".formatted(value, key));
+				stmt.executeUpdate("UPDATE keystore SET value='%s' WHERE `key`='%s';".formatted(value, key.name()));
 			} else {
 				rs.close();
-				stmt.executeUpdate("INSERT INTO keystore (`key`, value) VALUES('%s', '%s');".formatted(key, value));
+				stmt.executeUpdate("INSERT INTO keystore (`key`, value) VALUES('%s', '%s');".formatted(key.name(), value));
 			}
 		} catch(SQLException e) {
-			log.error("getTeams() exception", e);
+			log.error("saveValueToKeystore() exception", e);
 		}
 	}
 
@@ -85,7 +78,7 @@ public class DatabaseHandler implements Closeable {
                 return matchid;
 			}
 		} catch(SQLException e) {
-			log.error("getTeams() exception", e);
+			log.error("createMatch() exception", e);
 			return -1;
 		}
 	}
@@ -135,6 +128,43 @@ public class DatabaseHandler implements Closeable {
 			conn.close();
 		} catch(SQLException e) {
 			log.error("Database handler", e);
+		}
+	}
+
+	public @Nullable Match getMatchByID(int match_id) {
+		try (Statement stmt = conn.createStatement();
+			 ResultSet rs = stmt.executeQuery("SELECT * FROM matches where match_id = %d;".formatted(match_id))) {
+			if (rs.next()) {
+				return new Match(rs.getInt("match_id"), getTeamByID(rs.getInt("team_l")), getTeamByID(rs.getInt("team_r")), rs.getInt("points_left"), rs.getInt("points_right"));
+			} else return null;
+		} catch (SQLException e) {
+			log.error("getMatchByID() error", e);
+			return null;
+		}
+	}
+
+	public Team getTeamByID(int team_id) {
+		try (Statement stmt = conn.createStatement();
+			 ResultSet rs = stmt.executeQuery("SELECT * FROM teams where team_id = %d;".formatted(team_id))) {
+			if (rs.next()) {
+				int teamid = rs.getInt("team_id");
+				String teamname = rs.getString("team_name");
+				return new Team(teamid, teamname, getMembersByTeam(teamid));
+			} else return null;
+		} catch (SQLException e) {
+			log.error("getTeamByID() exception", e);
+			return null;
+		}
+	}
+
+	public void setCurrentMatchPoints(boolean isLeftSide, int points) {
+		try (Statement stmt = conn.createStatement()) {
+			int matchid = Integer.parseInt(getValueFromKeystore(KeyStore.CURRENT_MATCH_ID));
+			if (matchid >= 0) {
+				stmt.executeUpdate("UPDATE robosoutez.matches SET points_%s=%d WHERE match_id=%d;".formatted(isLeftSide ? "left" : "right", points, matchid));
+			}
+		} catch (SQLException e) {
+			log.error("setCurrentMatchPoints() exception", e);
 		}
 	}
 }

@@ -5,4 +5,6 @@
 
 <resources>
     <string name="app_name">Robosoutež</string>
+    <string name="btn_main_selectteam">Select team</string>
+    <string name="generic_not_loaded">NOT LOADED</string>
 </resources>

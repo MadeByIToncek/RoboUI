@@ -3,15 +3,11 @@
  *  Filmovy tabor Centrumdeti.cz & Roboticky tabor Centrumdeti.cz             *
  ******************************************************************************/
 
-package cz.centrumdeti.filmovytabor.robosoutez.commons.types;
+package cz.centrumdeti.filmovytabor.robosoutez.commons.comms.responses;
 
-public enum KeyStore {
-    CURRENT_MATCH_ID("-1"),
-    MIGRATION_LEVEL("0");
+import java.io.Serializable;
 
-    public final String def;
+import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Team;
 
-    KeyStore(String def) {
-        this.def = def;
-    }
+public record RequestTeamResponse(Team team) implements Serializable {
 }

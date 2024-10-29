@@ -14,12 +14,12 @@ import java.sql.SQLException;
 public class Roboserver {
 	private static final Logger log = LoggerFactory.getLogger(Roboserver.class);
 	public final SocketServer server;
-	public final Handler handler;
+	public final SocketExecutor socketExecutor;
 	public final DatabaseHandler db;
 
 	public Roboserver() {
 		server = new SocketServer(7777, this);
-		handler = new Handler(this);
+		socketExecutor = new SocketExecutor(this);
 
 		try {
 			db = new DatabaseHandler("jdbc:mariadb://localhost:3306/robosoutez", "robot", "robot");

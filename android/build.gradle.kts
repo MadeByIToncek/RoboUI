@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "cz.centrumdeti.filmovytabor.robosoutez.android"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.barcodescannerview)
+    implementation(project(":commons"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
