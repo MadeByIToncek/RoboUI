@@ -1,3 +1,8 @@
+/******************************************************************************
+ *                    Copyright (c) 2024.                                     *
+ *  Filmovy tabor Centrumdeti.cz & Roboticky tabor Centrumdeti.cz             *
+ ******************************************************************************/
+
 plugins {
     alias(libs.plugins.android.application)
 }

@@ -1,3 +1,8 @@
+<!--***************************************************************************
+  *                    Copyright (c) 2024.                                    *
+  *  Filmovy tabor Centrumdeti.cz & Roboticky tabor Centrumdeti.cz            *
+  ***************************************************************************-->
+
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Robosoutež" parent="Theme.Material3.DayNight.NoActionBar">

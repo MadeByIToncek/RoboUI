@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--***************************************************************************
+  *                    Copyright (c) 2024.                                    *
+  *  Filmovy tabor Centrumdeti.cz & Roboticky tabor Centrumdeti.cz            *
+  ***************************************************************************-->
+
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
