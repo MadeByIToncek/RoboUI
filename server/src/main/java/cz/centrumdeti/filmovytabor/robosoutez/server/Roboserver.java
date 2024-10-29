@@ -10,46 +10,48 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Roboserver {
-    private static final Logger log = LoggerFactory.getLogger(Roboserver.class);
-    public final SocketServer server;
-    public final Handler handler;
-    public final DatabaseHandler db;
-    public Roboserver() {
-        server = new SocketServer(7777,this);
-        handler = new Handler(this);
+	private static final Logger log = LoggerFactory.getLogger(Roboserver.class);
+	public final SocketServer server;
+	public final Handler handler;
+	public final DatabaseHandler db;
 
-        try {
-            db = new DatabaseHandler("jdbc:mariadb://localhost:3306/robosoutez", "robot", "robot");
-        } catch (SQLException e) {
-            log.error("DatabaseHandler startup",e);
-            throw new RuntimeException();
-        }
+	public Roboserver() {
+		server = new SocketServer(7777, this);
+		handler = new Handler(this);
 
-        // STARTUP
-        server.start();
+		try {
+			db = new DatabaseHandler("jdbc:mariadb://localhost:3306/robosoutez", "robot", "robot");
+		} catch(SQLException e) {
+			log.error("DatabaseHandler startup", e);
+			throw new RuntimeException();
+		}
 
-        Runtime.getRuntime().addShutdownHook(new Thread(()-> {
-            try {
-                server.stop();
-            } catch (IOException e) {
-                log.error("SocketServer shutdown", e);
-            }
-            try {
-                db.close();
-            } catch (IOException e) {
-                log.error("Database Handler shutdown",e);
-            }
-        }));
-    }
-    public Object executeRequest(Object o) {
-        return switch (o) {
-            case IndexRequest obj -> handler.handleIndexRequest(obj);
-            case ResetCommand obj -> handler.handleResetCommand(obj);
-            default -> new UnknownRequestResponse("Request could not be parsed");
-        };
-    }
+		// STARTUP
+		server.start();
 
-    public static void main(String[] args) {
-        new Roboserver();
-    }
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				server.stop();
+			} catch(IOException e) {
+				log.error("SocketServer shutdown", e);
+			}
+			try {
+				db.close();
+			} catch(IOException e) {
+				log.error("Database Handler shutdown", e);
+			}
+		}));
+	}
+
+	public static void main(String[] args) {
+		new Roboserver();
+	}
+
+	public Object executeRequest(Object o) {
+		return switch(o) {
+			case IndexRequest obj -> handler.handleIndexRequest(obj);
+			case ResetCommand obj -> handler.handleResetCommand(obj);
+			default -> new UnknownRequestResponse("Request could not be parsed");
+		};
+	}
 }

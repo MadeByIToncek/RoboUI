@@ -5,7 +5,7 @@ plugins {
 repositories {
 }
 
-dependencies{// https://mvnrepository.com/artifact/io.netty/netty-all
+dependencies {// https://mvnrepository.com/artifact/io.netty/netty-all
     implementation("io.javalin:javalin:6.3.0")
     implementation(project(":commons"))
     implementation("ch.qos.logback:logback-classic:1.5.11")
