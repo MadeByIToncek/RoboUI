@@ -5,9 +5,6 @@
 
 package cz.centrumdeti.filmovytabor.robosoutez.server;
 
-import cz.centrumdeti.filmovytabor.robosoutez.commons.comms.commands.ResetCommand;
-import cz.centrumdeti.filmovytabor.robosoutez.commons.comms.requests.IndexRequest;
-import cz.centrumdeti.filmovytabor.robosoutez.commons.comms.responses.UnknownRequestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +30,7 @@ public class Roboserver {
 
 		// STARTUP
 		server.start();
-
+		log.info("Server is online and running!");
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
 				server.stop();
@@ -48,15 +45,8 @@ public class Roboserver {
 		}));
 	}
 
+
 	public static void main(String[] args) {
 		new Roboserver();
-	}
-
-	public Object executeRequest(Object o) {
-		return switch(o) {
-			case IndexRequest obj -> handler.handleIndexRequest(obj);
-			case ResetCommand obj -> handler.handleResetCommand(obj);
-			default -> new UnknownRequestResponse("Request could not be parsed");
-		};
 	}
 }

@@ -5,8 +5,6 @@
 
 package cz.centrumdeti.filmovytabor.robosoutez.server;
 
-import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Member;
-import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -14,9 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.centrumdeti.filmovytabor.robosoutez.commons.types.KeyStore;
+import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Member;
+import cz.centrumdeti.filmovytabor.robosoutez.commons.types.Team;
 
 public class DatabaseHandler implements Closeable {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseHandler.class);
@@ -30,7 +36,7 @@ public class DatabaseHandler implements Closeable {
 //keep
 	}
 
-	public @Nullable String getValueFromKeystore(@NotNull String key) {
+    public @Nullable String getValueFromKeystore(@NotNull KeyStore key) {
 		try(Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM keystore WHERE 'key' = %s;".formatted(key))) {
 			if(rs.next()) {
@@ -44,7 +50,7 @@ public class DatabaseHandler implements Closeable {
 		}
 	}
 
-	public @NotNull String keystoreGetOrDefault(@NotNull String key, @NotNull String defval) {
+    public @NotNull String keystoreGetOrDefault(@NotNull KeyStore key, @NotNull String defval) {
 		String val = getValueFromKeystore(key);
 		if(val == null) {
 			saveValueToKeystore(key, defval);
@@ -54,7 +60,7 @@ public class DatabaseHandler implements Closeable {
 		}
 	}
 
-	public void saveValueToKeystore(@NotNull String key, @NotNull String value) {
+    public void saveValueToKeystore(@NotNull KeyStore key, @NotNull String value) {
 		try(Statement stmt = conn.createStatement()) {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM keystore WHERE 'key' = %s;".formatted(key));
 			if(rs.next()) {
@@ -74,7 +80,9 @@ public class DatabaseHandler implements Closeable {
 			stmt.executeUpdate("INSERT INTO matches (team_l, team_r, points_left, points_right) VALUES(%d, %d, 0, 0);".formatted(teamLeftID, teamRightID), Statement.RETURN_GENERATED_KEYS);
 			try(ResultSet rs = stmt.getGeneratedKeys()) {
 				rs.next();
-				return rs.getInt(1);
+                int matchid = rs.getInt(1);
+                saveValueToKeystore(KeyStore.CURRENT_MATCH_ID, String.valueOf(matchid));
+                return matchid;
 			}
 		} catch(SQLException e) {
 			log.error("getTeams() exception", e);
@@ -88,12 +96,12 @@ public class DatabaseHandler implements Closeable {
 			List<Team> teams = new ArrayList<>();
 
 			while(rs.next()) {
-				int teamid = rs.getInt("teamid");
-				String teamname = rs.getString("teamname");
+                int teamid = rs.getInt("team_id");
+                String teamname = rs.getString("team_name");
 				Team t = new Team(teamid, teamname, getMembersByTeam(teamid));
 				teams.add(t);
 			}
-
+            log.info("Requested teams, returning {} teams.", teams.size());
 			return teams;
 		} catch(SQLException e) {
 			log.error("getTeams() exception", e);
@@ -103,7 +111,7 @@ public class DatabaseHandler implements Closeable {
 
 	private @Nullable List<Member> getMembersByTeam(int team_id) {
 		try(Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM members WHERE 'team_id' = %d;".formatted(team_id))) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM members WHERE team_id = %d;".formatted(team_id))) {
 			List<Member> members = new ArrayList<>();
 
 			while(rs.next()) {
@@ -113,7 +121,7 @@ public class DatabaseHandler implements Closeable {
 
 				members.add(new Member(id, firstname, lastname));
 			}
-
+            log.info("Requested members of team {}, returnig {} results", team_id, members.size());
 			return members;
 		} catch(SQLException e) {
 			log.error("getMembersByTeam() exception", e);
